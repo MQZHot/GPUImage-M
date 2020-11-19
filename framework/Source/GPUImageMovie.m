@@ -511,6 +511,25 @@ static CVReturn renderCallback(CVDisplayLinkRef displayLink,
     [self processMovieFrame:movieFrame withSampleTime:currentSampleTime];
 }
 
+- (float)currentProgressSecond {
+    if (AVAssetReaderStatusReading == reader.status)
+    {
+        if (processingFrameTime.timescale == 0) {
+            return 0;
+        } else {
+            return  processingFrameTime.value * 1.0f / processingFrameTime.timescale;
+        }
+    }
+    else if ( AVAssetReaderStatusCompleted == reader.status )
+    {
+        return 1.f;
+    }
+    else
+    {
+        return 0.f;
+    }
+}
+
 - (float)progress
 {
     if ( AVAssetReaderStatusReading == reader.status )
